@@ -3,6 +3,7 @@ from PyQt5.QtWidgets import QApplication
 from datetime import datetime
 import sqlite3
 from PyQt5.QtWidgets import QLineEdit, QLabel, QPushButton
+from PyQt5 import QtWidgets
 
 Form, Window = uic.loadUiType("mainwindow.ui")
 
@@ -12,7 +13,7 @@ form = Form()
 form.setupUi(window)
 window.show()
 
-
+#екран добавления расходов
 lab_exp = QLabel()
 le = QLineEdit()
 lab_comment=QLabel()
@@ -26,8 +27,6 @@ margin-bottom:10px;
 
 """)
 status = QLabel()
-
-
 form.verticalLayout_2.addWidget(lab_exp)
 form.verticalLayout_2.addWidget(le)
 form.verticalLayout_2.addWidget(lab_comment)
@@ -39,22 +38,56 @@ lab_exp.setText("Введите трату (Поле не может быть п
 lab_comment.setText('Введите комментарий к трате (Поле может быть пустым)')
 status.setText("")
 
+#екран добавления прибыли
+ai_edit = QLineEdit()
+in_cat=QLabel()
+send_income = QPushButton()
+send_income.setText("Добавить")
+send_income.setStyleSheet("""
+background-color:"#269926";
+font-size:14px;
+margin-bottom:10px;
+
+""")
+comment_lab = QLabel()
+comment_lab.setText("Комментарий (Не обязательно)")
+comment_income = QLineEdit()
+inc_status = QLabel()
+
+form.verticalLayout_3.addWidget(ai_edit)
+form.verticalLayout_3.addWidget(comment_lab)
+form.verticalLayout_3.addWidget(comment_income)
+form.verticalLayout_3.addWidget(send_income)
+spacerItem = QtWidgets.QSpacerItem(0, 0, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+form.verticalLayout_3.addItem(spacerItem)
+form.verticalLayout_3.addWidget(inc_status)
+
+
+
+
 def get_categories_from_db():
     form.selected_cat.clear()
     conn = sqlite3.connect("base.db")
     cur = conn.cursor();
+
+    #Загрузка категорий расходов
     cur.execute("SELECT (category) FROM categories")
     rows = cur.fetchall()
 
     for row in rows:
         form.selected_cat.addItem(str(row[0]))
         #print(row[0])
+    #Загрузка категорий прибыли
+    cur.execute("SELECT (category) FROM income_categories")
+    rows = cur.fetchall()
+    for row in rows:
+        form.sel_cat.addItem(str(row[0]))
 
     conn.close()
 #form.get_expanse.setText("15")
 
 form.tabwidget1.setCurrentIndex(0)
-
+#Записываем данные по расходам в базу
 def savetodb(save_expanse, curdate, curtime, category, comment):
     db = sqlite3.connect('base.db')
     sql = db.cursor()
@@ -67,17 +100,10 @@ def on_click_expance(self):
     form.tabwidget1.setCurrentIndex(1)
 
 
-
-
-
-
-
 def on_click_income():
     #form.label1.setText("")
     form.tabwidget1.setCurrentIndex(2)
 
-
-    
 
 def click_back():
     form.tabwidget1.setCurrentIndex(0)
@@ -85,6 +111,14 @@ def click_back():
 
 def exit():
     app.exit()
+#Записываем данные по прибыли в базу
+def save_income(income, curdate, curtime, category, comment):
+    db = sqlite3.connect('base.db')
+    sql = db.cursor()
+    sql.execute(f"INSERT INTO incomes (income, date, time, category, comment) VALUES (?,?,?,?,?)",
+                (income, curdate, curtime, category, comment))
+    db.commit()
+    sql.close()
 def save_expanse():
     try:
         save_expance = int(le.text())
@@ -106,6 +140,25 @@ def save_expanse():
         status.setText("Возникла ошибка =(")
 
 
+def add_income():
+    try:
+        income = int(ai_edit.text())
+        f_today = str(datetime.today().strftime('%Y-%m-%d'))
+        f_time = str(datetime.now().strftime('%H:%M:%S'))
+        category = form.sel_cat.currentText()
+        comment = comment_income.text()
+        save_income(income, f_today, f_time, category, comment)
+        inc_status.setStyleSheet("""
+                background-color:"#269926";
+                font-size:14px; 
+                """)
+        inc_status.setText("Запись успешно добавлена")
+    except:
+        inc_status.setStyleSheet("""
+                        background-color:"red";
+                        font-size:14px; 
+                        """)
+        inc_status.setText("Возникла ошибка =(")
 
 def get_all_exp():
     conn = sqlite3.connect("base.db")
@@ -127,10 +180,10 @@ form.back_expanse.clicked.connect(click_back)
 form.back_income.clicked.connect(click_back)
 form.btn_exit.clicked.connect(exit)
 send_exp.clicked.connect(save_expanse)
+send_income.clicked.connect(add_income)
 
 print('Общее кол-во трат: ' + str(get_all_exp()))
 get_categories_from_db()
-
 
 
 app.exec()
