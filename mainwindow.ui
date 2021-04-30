@@ -44,7 +44,7 @@ color:&quot;white&quot;;
      <string notr="true"/>
     </property>
     <property name="currentIndex">
-     <number>2</number>
+     <number>3</number>
     </property>
     <widget class="QWidget" name="tab">
      <attribute name="title">
@@ -56,7 +56,7 @@ color:&quot;white&quot;;
         <x>0</x>
         <y>0</y>
         <width>431</width>
-        <height>222</height>
+        <height>380</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout">
@@ -71,8 +71,24 @@ color:&quot;white&quot;;
        </property>
        <item>
         <widget class="QLabel" name="label1">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="baseSize">
+          <size>
+           <width>0</width>
+           <height>80</height>
+          </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">margin-top:10px;
+margin-bottom:10px;</string>
+         </property>
          <property name="text">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:14pt;&quot;&gt;Привет. Это программа для &lt;/span&gt;&lt;/p&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:14pt;&quot;&gt;ведения личных финансов.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:14pt;&quot;&gt;Привет. Это программа для ведения личных финансов.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
         </widget>
        </item>
@@ -82,7 +98,7 @@ color:&quot;white&quot;;
           <font/>
          </property>
          <property name="styleSheet">
-          <string notr="true"/>
+          <string notr="true">margin-top:10px;</string>
          </property>
          <property name="text">
           <string>Добавить расход</string>
@@ -95,10 +111,20 @@ color:&quot;white&quot;;
           <font/>
          </property>
          <property name="styleSheet">
-          <string notr="true"/>
+          <string notr="true">margin-top:10px;</string>
          </property>
          <property name="text">
           <string>Добавить доход</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="statistics">
+         <property name="styleSheet">
+          <string notr="true">margin-top:10px;</string>
+         </property>
+         <property name="text">
+          <string>Статистика</string>
          </property>
         </widget>
        </item>
@@ -108,7 +134,8 @@ color:&quot;white&quot;;
           <font/>
          </property>
          <property name="styleSheet">
-          <string notr="true">margin-bottom:10px;</string>
+          <string notr="true">margin-top:10px;
+margin-bottom:150px;</string>
          </property>
          <property name="text">
           <string>Выйти из приложения</string>
@@ -282,6 +309,67 @@ margin-bottom:15px;</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="tab_4">
+     <attribute name="title">
+      <string>Статистика</string>
+     </attribute>
+     <widget class="QWidget" name="verticalLayoutWidget_4">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>431</width>
+        <height>501</height>
+       </rect>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout_4">
+       <property name="sizeConstraint">
+        <enum>QLayout::SetDefaultConstraint</enum>
+       </property>
+       <item>
+        <widget class="QPushButton" name="stat_back">
+         <property name="styleSheet">
+          <string notr="true">background-color : &quot;red&quot;;
+font-size:14px;</string>
+         </property>
+         <property name="text">
+          <string>Назад</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="all_stat">
+         <property name="styleSheet">
+          <string notr="true">margin-top:10px;</string>
+         </property>
+         <property name="text">
+          <string>Вся статистика</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="inc_stat">
+         <property name="styleSheet">
+          <string notr="true">margin-top:10px;</string>
+         </property>
+         <property name="text">
+          <string>Доходы</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="exp_stat">
+         <property name="styleSheet">
+          <string notr="true">margin-top:10px;</string>
+         </property>
+         <property name="text">
+          <string>Расходы</string>
          </property>
         </widget>
        </item>

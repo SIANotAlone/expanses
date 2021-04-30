@@ -6,7 +6,7 @@ import sqlite3
 from PyQt5.QtWidgets import QLineEdit, QLabel, QPushButton
 from PyQt5 import QtWidgets
 from qt_material import apply_stylesheet
-
+import matplotlib.pyplot as plt
 
 Form, Window = uic.loadUiType("mainwindow.ui")
 
@@ -212,6 +212,122 @@ def get_all_income():
     conn.close()
     return all_inc
 
+
+def statistics_tab():
+    form.tabwidget1.setCurrentIndex(3)
+def all_stat():
+    income = get_all_income()
+    expanses = get_all_exp()
+
+    labels = 'Прибыль: ' + str(income), 'Расходы: ' + str(expanses)
+
+    sizes = [income, expanses]
+    explode = (0, 0.1)
+
+    fig1, ax1 = plt.subplots()
+    ax1.pie(sizes, explode=explode, labels=labels, autopct='%1.1f%%',
+            shadow=True, startangle=90)
+    ax1.axis('equal')
+
+    plt.show()
+
+
+
+def inc_stat():
+    conn = sqlite3.connect("base.db")
+    cur = conn.cursor();
+
+    # Загрузка категорий прибыли
+    cur.execute("SELECT (category) FROM income_categories")
+    rows = cur.fetchall()
+    categories = []
+    for row in rows:
+        categories.append(str(row[0]))
+    conn.close()
+    # print(categories)
+    labels = categories
+    conn = sqlite3.connect("base.db")
+    cur = conn.cursor();
+    categories_exp = []
+    sum = []
+    cat_len = len(categories)
+    # print(str(i))
+    i = 0
+    while i != cat_len:
+
+        sum_cat = 0
+        cur.execute("SELECT (income) FROM incomes WHERE category='" + categories[i] + "'")
+        rows = cur.fetchall()
+        for row in rows:
+            sum_cat += row[0]
+
+        categories[i] += ": " + str(sum_cat)
+        i += 1
+        sum.append(sum_cat)
+        # print(str(sum_cat))
+    print(sum)
+    conn.close()
+    labels = categories
+
+    sizes = sum
+    # explode = (0, 0.1)
+
+    fig1, ax1 = plt.subplots()
+    ax1.pie(sizes, labels=labels,
+            shadow=False, startangle=90)
+    ax1.axis('equal')
+
+    plt.show()
+
+
+def exp_stat():
+    conn = sqlite3.connect("base.db")
+    cur = conn.cursor();
+
+    # Загрузка категорий расходов
+    cur.execute("SELECT (category) FROM categories")
+    rows = cur.fetchall()
+    categories = []
+    for row in rows:
+        categories.append(str(row[0]))
+    conn.close()
+    #print(categories)
+    labels = categories
+    conn = sqlite3.connect("base.db")
+    cur = conn.cursor();
+    categories_exp = []
+    sum = []
+    cat_len = len(categories)
+    #print(str(i))
+    i=0
+    while i!=cat_len:
+
+        sum_cat=0
+        cur.execute("SELECT (expanse) FROM expanses WHERE category='"+categories[i]+"'")
+        rows = cur.fetchall()
+        for row in rows:
+            sum_cat += row[0]
+
+        categories[i] += ": " + str(sum_cat)
+        i += 1
+        sum.append(sum_cat)
+        #print(str(sum_cat))
+    print(sum)
+    conn.close()
+    labels = categories
+
+    sizes = sum
+    #explode = (0, 0.1)
+
+    fig1, ax1 = plt.subplots()
+    ax1.pie(sizes,  labels=labels,
+            shadow=False, startangle=90)
+    ax1.axis('equal')
+
+    plt.show()
+
+
+
 form.add_expanse.clicked.connect(on_click_expance)
 form.add_income.clicked.connect(on_click_income)
 form.back_expanse.clicked.connect(click_back)
@@ -219,6 +335,11 @@ form.back_income.clicked.connect(click_back)
 form.btn_exit.clicked.connect(exit)
 send_exp.clicked.connect(save_expanse)
 send_income.clicked.connect(add_income)
+form.statistics.clicked.connect(statistics_tab)
+form.stat_back.clicked.connect(click_back)
+form.all_stat.clicked.connect(all_stat)
+form.inc_stat.clicked.connect(inc_stat)
+form.exp_stat.clicked.connect(exp_stat)
 
 print('Общее кол-во трат: ' + str(get_all_exp()))
 print('Общее кол-во прибыли: ' + str(get_all_income()))
