@@ -41,16 +41,7 @@ color:&quot;white&quot;;
      </font>
     </property>
     <property name="styleSheet">
-     <string notr="true">QTabBar::tab {
-  background: &quot;#0C6363&quot;; 
-
-  border: 1px solid black; 
-  padding: 15px;
-} 
-QTabBar::tab:selected { 
-  background: &quot;#269999&quot;; 
-  margin-bottom: -1px; 
-}</string>
+     <string notr="true"/>
     </property>
     <property name="currentIndex">
      <number>2</number>
@@ -80,9 +71,6 @@ QTabBar::tab:selected {
        </property>
        <item>
         <widget class="QLabel" name="label1">
-         <property name="styleSheet">
-          <string notr="true">color:&quot;#FF4040&quot;;</string>
-         </property>
          <property name="text">
           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:14pt;&quot;&gt;Привет. Это программа для &lt;/span&gt;&lt;/p&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:14pt;&quot;&gt;ведения личных финансов.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
@@ -91,14 +79,10 @@ QTabBar::tab:selected {
        <item>
         <widget class="QPushButton" name="add_expanse">
          <property name="font">
-          <font>
-           <pointsize>-1</pointsize>
-          </font>
+          <font/>
          </property>
          <property name="styleSheet">
-          <string notr="true">background-color:&quot;#269926&quot;;
-font-size:14px;
-margin-bottom:10px;</string>
+          <string notr="true"/>
          </property>
          <property name="text">
           <string>Добавить расход</string>
@@ -108,14 +92,10 @@ margin-bottom:10px;</string>
        <item>
         <widget class="QPushButton" name="add_income">
          <property name="font">
-          <font>
-           <pointsize>-1</pointsize>
-          </font>
+          <font/>
          </property>
          <property name="styleSheet">
-          <string notr="true">background-color:&quot;#269926&quot;;
-font-size:14px;
-margin-bottom:10px;</string>
+          <string notr="true"/>
          </property>
          <property name="text">
           <string>Добавить доход</string>
@@ -125,14 +105,10 @@ margin-bottom:10px;</string>
        <item>
         <widget class="QPushButton" name="btn_exit">
          <property name="font">
-          <font>
-           <pointsize>-1</pointsize>
-          </font>
+          <font/>
          </property>
          <property name="styleSheet">
-          <string notr="true">background-color:&quot;#269926&quot;;
-font-size:14px;
-margin-bottom:10px;</string>
+          <string notr="true">margin-bottom:10px;</string>
          </property>
          <property name="text">
           <string>Выйти из приложения</string>
@@ -258,9 +234,17 @@ font-size:14px;</string>
         <widget class="QLabel" name="label_3">
          <property name="font">
           <font>
-           <family>Montserrat</family>
-           <pointsize>14</pointsize>
+           <family>Monserrat</family>
+           <pointsize>-1</pointsize>
           </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">font-size:14px;
+font-family:&quot;Monserrat&quot;;
+padding-top:15px;
+padding-bottom:15px;
+margin-top:15px;
+margin-bottom:15px;</string>
          </property>
          <property name="text">
           <string>Выберите категорию прибыли</string>
@@ -271,7 +255,11 @@ font-size:14px;</string>
         </widget>
        </item>
        <item>
-        <widget class="QComboBox" name="sel_cat"/>
+        <widget class="QComboBox" name="sel_cat">
+         <property name="styleSheet">
+          <string notr="true">padding-top:10px;</string>
+         </property>
+        </widget>
        </item>
        <item>
         <widget class="QLabel" name="label_2">
@@ -281,7 +269,10 @@ font-size:14px;</string>
          <property name="styleSheet">
           <string notr="true">font-size:14px;
 font-family:&quot;Monserrat&quot;;
-</string>
+padding-top:15px;
+padding-bottom:15px;
+margin-top:15px;
+margin-bottom:15px;</string>
          </property>
          <property name="text">
           <string>Добавить прибыль</string>

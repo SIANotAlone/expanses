@@ -1,9 +1,12 @@
 from PyQt5 import uic
+from PyQt5.QtGui import QIntValidator
 from PyQt5.QtWidgets import QApplication
 from datetime import datetime
 import sqlite3
 from PyQt5.QtWidgets import QLineEdit, QLabel, QPushButton
 from PyQt5 import QtWidgets
+from qt_material import apply_stylesheet
+
 
 Form, Window = uic.loadUiType("mainwindow.ui")
 
@@ -13,11 +16,16 @@ form = Form()
 form.setupUi(window)
 window.show()
 
+apply_stylesheet(app, theme='dark_purple.xml')
 #екран добавления расходов
 lab_exp = QLabel()
 le = QLineEdit()
+le.setFixedHeight(40)
 lab_comment=QLabel()
 le_comment = QLineEdit()
+le_comment.setFixedHeight(40)
+onlyInt = QIntValidator()
+le.setValidator(onlyInt)
 send_exp = QPushButton()
 send_exp.setText("Добавить")
 send_exp.setStyleSheet("""
@@ -40,18 +48,33 @@ status.setText("")
 
 #екран добавления прибыли
 ai_edit = QLineEdit()
+ai_edit.setValidator(onlyInt)
+ai_edit.setFixedHeight(40)
 in_cat=QLabel()
+in_cat.setFixedHeight(40)
+form.sel_cat.setFixedHeight(40)
+in_cat.setStyleSheet("""
+margin-top:10px;
+""")
 send_income = QPushButton()
+form.label_2.setFixedHeight(40)
+form.label_3.setFixedHeight(40)
 send_income.setText("Добавить")
 send_income.setStyleSheet("""
 background-color:"#269926";
 font-size:14px;
 margin-bottom:10px;
-
+margin-top:10px;
 """)
 comment_lab = QLabel()
 comment_lab.setText("Комментарий (Не обязательно)")
+comment_lab.setFixedHeight(40)
+comment_lab.setStyleSheet("""
+margin-top:15px;
+margin-bottom:15px;
+""")
 comment_income = QLineEdit()
+comment_income.setFixedHeight(40)
 inc_status = QLabel()
 
 form.verticalLayout_3.addWidget(ai_edit)
@@ -148,17 +171,21 @@ def add_income():
         category = form.sel_cat.currentText()
         comment = comment_income.text()
         save_income(income, f_today, f_time, category, comment)
+
         inc_status.setStyleSheet("""
                 background-color:"#269926";
                 font-size:14px; 
+                
                 """)
         inc_status.setText("Запись успешно добавлена")
     except:
         inc_status.setStyleSheet("""
                         background-color:"red";
                         font-size:14px; 
+                        
                         """)
         inc_status.setText("Возникла ошибка =(")
+
 
 def get_all_exp():
     conn = sqlite3.connect("base.db")
@@ -173,6 +200,17 @@ def get_all_exp():
 
     conn.close()
     return all_exp
+def get_all_income():
+    conn = sqlite3.connect("base.db")
+    cur = conn.cursor();
+    cur.execute("SELECT (income) FROM incomes")
+    rows = cur.fetchall()
+    all_inc = 0
+    for row in rows:
+        all_inc += row[0]
+
+    conn.close()
+    return all_inc
 
 form.add_expanse.clicked.connect(on_click_expance)
 form.add_income.clicked.connect(on_click_income)
@@ -183,6 +221,7 @@ send_exp.clicked.connect(save_expanse)
 send_income.clicked.connect(add_income)
 
 print('Общее кол-во трат: ' + str(get_all_exp()))
+print('Общее кол-во прибыли: ' + str(get_all_income()))
 get_categories_from_db()
 
 
