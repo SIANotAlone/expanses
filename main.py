@@ -337,7 +337,7 @@ def get_exp_by_week():
 
     day = f_today.split("-")
     print(day)
-    i=0
+
     conn = sqlite3.connect("base.db")
     cur = conn.cursor();
     exp = []
@@ -347,24 +347,47 @@ def get_exp_by_week():
     for row in rows:
         categories.append(str(row[0]))
     sum=0
-    while i!=7:
-        get_date = datetime.strptime(f_today, '%Y-%m-%d')
-        delta = get_date - timedelta(days=i)
-        day= str(delta).split(" ")
-        #print(day[0])
-
-        cur.execute("SELECT (expanse) FROM expanses WHERE date='" + day[0] + "' AND category='testcategory' ")
-        rows = cur.fetchall()
-        all_exp = 0
-        for row in rows:
-            all_exp += row[0]
-        exp.append(all_exp)
-        sum+=exp[i]
-        i+=1
-    print(str(exp))
-    print(str(sum))
-
+    n=0
+    bycategories = []
+    for n in range(len(categories)):
+        #print(categories[n])
+        #print("Итерация цикла: " + str(n))
+        i = 0
+        while i != 7:
+            get_date = datetime.strptime(f_today, '%Y-%m-%d')
+            delta = get_date - timedelta(days=i)
+            day = str(delta).split(" ")
+            # print(day[0])
+            query = "SELECT (expanse) FROM expanses WHERE date='" + day[0] + "' AND category='"+categories[n]+"'"
+            #print(query)
+            cur.execute(query)
+            rows = cur.fetchall()
+            all_exp = 0
+            for row in rows:
+                all_exp += row[0]
+            exp.append(all_exp)
+            sum += exp[i]
+            i += 1
+        #print(str(exp))
+        #print(str(sum))
+        bycategories.append(sum)
     conn.close()
+    print(str(bycategories))
+
+    for m in range(len(categories)):
+        categories [m]+= ": " + str(bycategories[m])
+
+    labels = categories
+
+    sizes = bycategories
+    # explode = (0, 0.1)
+
+    fig1, ax1 = plt.subplots()
+    ax1.pie(sizes, labels=labels,
+            shadow=False, startangle=90)
+    ax1.axis('equal')
+
+    plt.show()
         #i+=1
     # conn = sqlite3.connect("base.db")
     # cur = conn.cursor();
