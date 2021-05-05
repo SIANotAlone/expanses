@@ -1,3 +1,4 @@
+from datetime import timedelta
 from PyQt5 import uic
 from PyQt5.QtGui import QIntValidator
 from PyQt5.QtWidgets import QApplication
@@ -216,6 +217,9 @@ def get_all_income():
 def statistics_tab():
     form.tabwidget1.setCurrentIndex(3)
 def all_stat():
+
+    #form.selected_cat.clear()
+    #form.sel_cat.clear()
     income = get_all_income()
     expanses = get_all_exp()
 
@@ -225,7 +229,7 @@ def all_stat():
     explode = (0, 0.1)
 
     fig1, ax1 = plt.subplots()
-    ax1.pie(sizes, explode=explode, labels=labels, autopct='%1.1f%%',
+    ax1.pie(sizes, explode=explode, labels=labels,
             shadow=True, startangle=90)
     ax1.axis('equal')
 
@@ -326,7 +330,54 @@ def exp_stat():
 
     plt.show()
 
+def get_exp_by_week():
+    f_today = str(datetime.today().strftime('%Y-%m-%d'))
 
+    #day = str(datetime.today().strftime('%d'))
+
+    day = f_today.split("-")
+    print(day)
+    i=0
+    conn = sqlite3.connect("base.db")
+    cur = conn.cursor();
+    exp = []
+    cur.execute("SELECT (category) FROM categories")
+    rows = cur.fetchall()
+    categories = []
+    for row in rows:
+        categories.append(str(row[0]))
+    sum=0
+    while i!=7:
+        get_date = datetime.strptime(f_today, '%Y-%m-%d')
+        delta = get_date - timedelta(days=i)
+        day= str(delta).split(" ")
+        #print(day[0])
+
+        cur.execute("SELECT (expanse) FROM expanses WHERE date='" + day[0] + "' AND category='testcategory' ")
+        rows = cur.fetchall()
+        all_exp = 0
+        for row in rows:
+            all_exp += row[0]
+        exp.append(all_exp)
+        sum+=exp[i]
+        i+=1
+    print(str(exp))
+    print(str(sum))
+
+    conn.close()
+        #i+=1
+    # conn = sqlite3.connect("base.db")
+    # cur = conn.cursor();
+    # cur.execute("SELECT (expanse) FROM expanses WHERE date='"+f_today+"'")
+    # rows = cur.fetchall()
+    # all_exp = 0
+    # for row in rows:
+    #     # form.selected_cat.addItem(str(row[0]))
+    #     # print(row[0])
+    #     all_exp += row[0]
+    #
+    # conn.close()
+    # return all_exp
 
 form.add_expanse.clicked.connect(on_click_expance)
 form.add_income.clicked.connect(on_click_income)
@@ -340,6 +391,7 @@ form.stat_back.clicked.connect(click_back)
 form.all_stat.clicked.connect(all_stat)
 form.inc_stat.clicked.connect(inc_stat)
 form.exp_stat.clicked.connect(exp_stat)
+form.sort_by_week.clicked.connect(get_exp_by_week)
 
 print('Общее кол-во трат: ' + str(get_all_exp()))
 print('Общее кол-во прибыли: ' + str(get_all_income()))
