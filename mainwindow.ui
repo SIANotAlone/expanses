@@ -44,7 +44,7 @@ color:&quot;white&quot;;
      <string notr="true"/>
     </property>
     <property name="currentIndex">
-     <number>3</number>
+     <number>2</number>
     </property>
     <widget class="QWidget" name="tab">
      <attribute name="title">
@@ -56,7 +56,7 @@ color:&quot;white&quot;;
         <x>0</x>
         <y>0</y>
         <width>431</width>
-        <height>380</height>
+        <height>426</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout">
@@ -125,6 +125,16 @@ margin-bottom:10px;</string>
          </property>
          <property name="text">
           <string>Статистика</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="settings">
+         <property name="styleSheet">
+          <string notr="true">margin-top:10px;</string>
+         </property>
+         <property name="text">
+          <string>Настройки</string>
          </property>
         </widget>
        </item>
@@ -384,6 +394,26 @@ font-size:14px;</string>
         </widget>
        </item>
        <item>
+        <widget class="QPushButton" name="sort_by_month">
+         <property name="styleSheet">
+          <string notr="true">margin-top:10px;</string>
+         </property>
+         <property name="text">
+          <string>Расходы за месяц</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="sort_by_year">
+         <property name="styleSheet">
+          <string notr="true">margin-top:10px;</string>
+         </property>
+         <property name="text">
+          <string>Расходы за год</string>
+         </property>
+        </widget>
+       </item>
+       <item>
         <spacer name="verticalSpacer">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -395,6 +425,34 @@ font-size:14px;</string>
           </size>
          </property>
         </spacer>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="tab_5">
+     <attribute name="title">
+      <string>Настройки</string>
+     </attribute>
+     <widget class="QWidget" name="verticalLayoutWidget_5">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>431</width>
+        <height>501</height>
+       </rect>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout_5">
+       <item>
+        <widget class="QPushButton" name="set_back">
+         <property name="styleSheet">
+          <string notr="true">background-color : &quot;red&quot;;
+font-size:14px;</string>
+         </property>
+         <property name="text">
+          <string>Назад</string>
+         </property>
+        </widget>
        </item>
       </layout>
      </widget>

@@ -78,6 +78,29 @@ comment_income = QLineEdit()
 comment_income.setFixedHeight(40)
 inc_status = QLabel()
 
+#екран настроек
+lab_add_exp_cat = QLabel()
+lab_add_exp_cat.setFixedHeight(40)
+edit_add_exp_cat = QLineEdit()
+edit_add_exp_cat.setFixedHeight(40)
+add_exp_cat = QPushButton()
+add_exp_cat.setFixedHeight(40)
+
+
+lab_add_inc_cat = QLabel()
+lab_add_inc_cat.setFixedHeight(40)
+edit_add_inc_cat = QLineEdit()
+edit_add_inc_cat.setFixedHeight(40)
+add_inc_cat = QPushButton()
+add_inc_cat.setFixedHeight(40)
+
+
+lab_add_exp_cat.setText("Добавить категорию расходов")
+lab_add_inc_cat.setText("Добавить категорию прибыли")
+add_exp_cat.setText("Добавить")
+add_inc_cat.setText("Добавить")
+
+
 form.verticalLayout_3.addWidget(ai_edit)
 form.verticalLayout_3.addWidget(comment_lab)
 form.verticalLayout_3.addWidget(comment_income)
@@ -87,10 +110,22 @@ form.verticalLayout_3.addItem(spacerItem)
 form.verticalLayout_3.addWidget(inc_status)
 
 
+form.verticalLayout_5.addWidget(lab_add_exp_cat)
+form.verticalLayout_5.addWidget(edit_add_exp_cat)
+form.verticalLayout_5.addWidget(add_exp_cat)
+form.verticalLayout_5.addWidget(lab_add_inc_cat)
+form.verticalLayout_5.addWidget(edit_add_inc_cat)
+form.verticalLayout_5.addWidget(add_inc_cat)
+spacerItem2 = QtWidgets.QSpacerItem(0, 0, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+form.verticalLayout_5.addItem(spacerItem2)
+
+
+
 
 
 def get_categories_from_db():
     form.selected_cat.clear()
+    form.sel_cat.clear()
     conn = sqlite3.connect("base.db")
     cur = conn.cursor();
 
@@ -229,7 +264,7 @@ def all_stat():
     explode = (0, 0.1)
 
     fig1, ax1 = plt.subplots()
-    ax1.pie(sizes, explode=explode, labels=labels,
+    ax1.pie(sizes, explode=explode, labels=labels, autopct='%1.1f%%',
             shadow=True, startangle=90)
     ax1.axis('equal')
 
@@ -277,7 +312,7 @@ def inc_stat():
     # explode = (0, 0.1)
 
     fig1, ax1 = plt.subplots()
-    ax1.pie(sizes, labels=labels,
+    ax1.pie(sizes, labels=labels, autopct='%1.1f%%',
             shadow=False, startangle=90)
     ax1.axis('equal')
 
@@ -324,16 +359,20 @@ def exp_stat():
     #explode = (0, 0.1)
 
     fig1, ax1 = plt.subplots()
-    ax1.pie(sizes,  labels=labels,
+    ax1.pie(sizes,  labels=labels, autopct='%1.1f%%',
             shadow=False, startangle=90)
     ax1.axis('equal')
 
     plt.show()
 
-def get_exp_by_week():
+def test_sort():
+    pass
+
+
+def sort_by_time(days_count):
     f_today = str(datetime.today().strftime('%Y-%m-%d'))
 
-    #day = str(datetime.today().strftime('%d'))
+    # day = str(datetime.today().strftime('%d'))
 
     day = f_today.split("-")
     print(day)
@@ -346,20 +385,21 @@ def get_exp_by_week():
     categories = []
     for row in rows:
         categories.append(str(row[0]))
-    sum=0
-    n=0
+    sum = 0
+    n = 0
     bycategories = []
     for n in range(len(categories)):
-        #print(categories[n])
-        #print("Итерация цикла: " + str(n))
+        # print(categories[n])
+        # print("Итерация цикла: " + str(n))
         i = 0
-        while i != 7:
+
+        while i != days_count:
             get_date = datetime.strptime(f_today, '%Y-%m-%d')
             delta = get_date - timedelta(days=i)
             day = str(delta).split(" ")
             # print(day[0])
-            query = "SELECT (expanse) FROM expanses WHERE date='" + day[0] + "' AND category='"+categories[n]+"'"
-            #print(query)
+            query = "SELECT (expanse) FROM expanses WHERE date='" + day[0] + "' AND category='" + categories[n] + "'"
+            # print(query)
             cur.execute(query)
             rows = cur.fetchall()
             all_exp = 0
@@ -368,14 +408,14 @@ def get_exp_by_week():
             exp.append(all_exp)
             sum += exp[i]
             i += 1
-        #print(str(exp))
-        #print(str(sum))
+        # print(str(exp))
+        # print(str(sum))
         bycategories.append(sum)
     conn.close()
     print(str(bycategories))
 
     for m in range(len(categories)):
-        categories [m]+= ": " + str(bycategories[m])
+        categories[m] += ": " + str(bycategories[m])
 
     labels = categories
 
@@ -383,24 +423,79 @@ def get_exp_by_week():
     # explode = (0, 0.1)
 
     fig1, ax1 = plt.subplots()
-    ax1.pie(sizes, labels=labels,
+    ax1.pie(sizes, labels=labels, autopct='%1.1f%%',
             shadow=False, startangle=90)
     ax1.axis('equal')
 
     plt.show()
-        #i+=1
-    # conn = sqlite3.connect("base.db")
-    # cur = conn.cursor();
-    # cur.execute("SELECT (expanse) FROM expanses WHERE date='"+f_today+"'")
-    # rows = cur.fetchall()
-    # all_exp = 0
-    # for row in rows:
-    #     # form.selected_cat.addItem(str(row[0]))
-    #     # print(row[0])
-    #     all_exp += row[0]
-    #
-    # conn.close()
-    # return all_exp
+
+def get_exp_by_month():
+    sort_by_time(31)
+
+def get_exp_by_year():
+    sort_by_time(365)
+
+def get_exp_by_week():
+    sort_by_time(7)
+
+
+def settings():
+    form.tabwidget1.setCurrentIndex(4)
+
+def set_back():
+    form.tabwidget1.setCurrentIndex(0)
+
+
+def add_exp_category():
+    if edit_add_exp_cat!="":
+        category = edit_add_exp_cat.text()
+        catch_into_db = False
+        db = sqlite3.connect('base.db')
+        sql = db.cursor()
+        sql.execute("SELECT (category) FROM categories")
+        rows = sql.fetchall()
+        categories = []
+        for row in rows:
+            categories.append(str(row[0]))
+        for cat in categories:
+            if cat==category:
+                catch_into_db = True
+            else:
+                catch_into_db = False
+        if catch_into_db == False:
+            sql.execute("INSERT INTO categories(category) VALUES ('"+category+"')")
+            db.commit()
+            sql.close()
+            db.close()
+            get_categories_from_db()
+        else:
+            print("Такая категория уже есть базе")
+
+
+def add_inc_category():
+    if edit_add_exp_cat != "":
+        category = edit_add_inc_cat.text()
+        catch_into_db = False
+        db = sqlite3.connect('base.db')
+        sql = db.cursor()
+        sql.execute("SELECT (category) FROM income_categories")
+        rows = sql.fetchall()
+        categories = []
+        for row in rows:
+            categories.append(str(row[0]))
+        for cat in categories:
+            if cat == category:
+                catch_into_db = True
+            else:
+                catch_into_db = False
+        if catch_into_db == False:
+            sql.execute("INSERT INTO income_categories(category) VALUES ('" + category + "')")
+            db.commit()
+            sql.close()
+            db.close()
+            get_categories_from_db()
+        else:
+            print("Такая категория уже есть базе")
 
 form.add_expanse.clicked.connect(on_click_expance)
 form.add_income.clicked.connect(on_click_income)
@@ -415,7 +510,12 @@ form.all_stat.clicked.connect(all_stat)
 form.inc_stat.clicked.connect(inc_stat)
 form.exp_stat.clicked.connect(exp_stat)
 form.sort_by_week.clicked.connect(get_exp_by_week)
-
+form.sort_by_month.clicked.connect(get_exp_by_month)
+form.sort_by_year.clicked.connect(get_exp_by_year)
+form.settings.clicked.connect(settings)
+form.set_back.clicked.connect(set_back)
+add_inc_cat.clicked.connect(add_inc_category)
+add_exp_cat.clicked.connect(add_exp_category)
 print('Общее кол-во трат: ' + str(get_all_exp()))
 print('Общее кол-во прибыли: ' + str(get_all_income()))
 get_categories_from_db()
